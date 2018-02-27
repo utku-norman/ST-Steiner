@@ -15,12 +15,24 @@ ST-Steiner is a prize-collecting Steiner forest based algorithm for spatiotempor
 Installation
 ============
 
+Prerequisites
+-------------
+
++ python version 3.5 or greater
++ `Boost C++ Libraries <http://www.boost.org/>`_
++ python packages listed in requirements.txt
+
+Initialize the environment
+--------------------------
 
 Create a directory for ST-Steiner files, e.g. ``ST-Steiner-env``:
 
 .. code-block:: bash
 
 	$ mkdir ST-Steiner-env && cd ST-Steiner-env
+
+Prepare solver
+--------------
 
 Download msgsteiner 1.3, a solver for the prize-collecting Steiner tree problem used in ST-Steiner:
 
@@ -34,6 +46,9 @@ Compile the solver (requires `Boost C++ Libraries <http://www.boost.org/>`_):
 
 	$ make --directory msgsteiner-1.3/
 
+
+Download ST-Steiner source
+--------------------------
 
 Download ST-Steiner source code:
 
