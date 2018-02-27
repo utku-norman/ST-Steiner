@@ -47,7 +47,7 @@ def read_prizes(path, logger=None, upper=False):
     return prizes
 
 
-def read_network(file, logger=None, upper_nodes=False):
+def read_network(file, logger=None, upper_nodes=True):
 
     if logger is not None:
         logger.debug('Reading network from {}'.format(file))
