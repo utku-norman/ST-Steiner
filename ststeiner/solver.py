@@ -143,8 +143,23 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
 
     compute_edge_costs(network, logger=logger, inplace=True)
 
-    network_prizes = {node: prize for node, prize in prizes.items()
-                      if node in network}
+    # network_prizes = {node: prize for node, prize in prizes.items()
+    #                   if node in network}
+    network_prizes = dict()
+    for node in network:
+        
+        prize = None
+
+        if '_' in node:
+            node2 = node.split('_')[0]
+            if node2 in prizes:
+                prize = prizes[node2]
+        elif node in prizes:
+            prize = prizes[node]
+
+        if prize is not None:
+            network_prizes[node] = prize
+
     nx.set_node_attributes(network, name='prize', values=network_prizes)
 
     scale_node_prizes(network, beta, to_attr_name='scaled_prize',
@@ -489,7 +504,7 @@ def compute_edge_costs(G, attr_name='weight',
 
 def compute_edge_cost(weight):
     return weight
-    return 1 - (weight ** 2)
+    # return 1 - (weight ** 2)
 
 
 def scale_node_prizes(network, beta,
