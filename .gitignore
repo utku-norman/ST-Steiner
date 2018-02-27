@@ -7,11 +7,11 @@ __pycache__/
 *.so
 
 # extra dirs
-experiments/
+experiments/"
 experiments/*
 tests/
 
-# extra files
+# extra files"
 *.jpg
 *.xcf
 *.eps

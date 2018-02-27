@@ -28,7 +28,7 @@ Download msgsteiner 1.3, a solver for the prize-collecting Steiner tree problem 
 
 	$ wget http://staff.polito.it/alfredo.braunstein/code/msgsteiner-1.3.tgz  && tar xzf msgsteiner-1.3.tgz && rm  msgsteiner-1.3.tgz
 
-Compile the solver:
+Compile the solver (requires `Boost C++ Libraries <http://www.boost.org/>`_):
 
 .. code-block:: bash
 
@@ -113,7 +113,7 @@ Usage
 	                      [-b BETA] [-l LAMBD] [-a ALPHA]
 	                      [--exp_id EXP_ID] [--fold FOLD]
 	                      [--prize_mode PRIZE_MODE]
-	                      [--remove_intermediate REMOVE_INTERMEDIATE]
+	                      [--retain_intermediate]
 	                      [--version]
 
 See also ``python ./bin/st_steiner --help``.
