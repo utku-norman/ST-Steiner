@@ -137,7 +137,7 @@ Reference
 =========
 
 Norman, U. and Cicek, A. E. (2018). Spatio-temporal gene discovery for autism spectrum disorder. bioRxiv.
-Available at: https://www.biorxiv.org/content/early/2018/03/08/256693 
+Available at: https://www.biorxiv.org/content/early/2018/03/08/256693
 
 License
 =======
