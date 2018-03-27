@@ -14,6 +14,7 @@ experiments/"
 experiments/*
 tests/
 intermediate_files/
+clusters/
 
 # extra files"
 *.jpg
