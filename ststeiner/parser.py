@@ -81,6 +81,9 @@ def parse_commands(argv):
     parser.add_argument('--prize_mode', type=str, default=config['ST-Steiner']['prize_mode'],
                        help='''sets the artificial prize mode: positive (default), or negative''')
 
+    parser.add_argument('--cost_mode', type=str, default=config['ST-Steiner']['cost_mode'],
+                       help='''sets the edge cost mode: "weight" (default), or "1-weightsqd" (1-weight^2)''')
+
     parser.add_argument('--retain_intermediate', default=config['ST-Steiner'].getboolean('retain_intermediate'),
                        help='''sets whether to remove ST-Steiner generated intermediate files''', action='store_true')
 

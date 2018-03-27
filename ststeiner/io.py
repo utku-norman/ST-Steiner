@@ -29,7 +29,7 @@ import networkx as nx
 from ststeiner.utils import s_if_plural, is_none
 
 
-def read_prizes(path, logger=None, upper=False):
+def read_prizes(path, logger=None, upper=True):
     '''Read node prize data from file.'''
 
     prizes = dict()

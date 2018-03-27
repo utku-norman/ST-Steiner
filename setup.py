@@ -19,7 +19,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='ST_Steiner',
-    version='0.1.1-alpha',
+    version='0.1.3-alpha',
 
     description='an algorithm for spatio-temporal gene discovery for Autism Spectrum Disorder',  # Required
 

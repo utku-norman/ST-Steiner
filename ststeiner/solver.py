@@ -41,6 +41,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                     config_file=None, cluster_list_file=None,
                     stp_dir='inputs', cluster_dir='results', log_dir='logs',
                     beta=1, lambd=0, alpha=2, prize_mode='positive',
+                    cost_mode='weight',
                     log_name='ST-Steiner', rounder=6, fold='1-1',
                     exp_id=None, art_prizes_dir=None,
                     retain_intermediate=True):
@@ -49,6 +50,16 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     lambd = float(lambd)
     alpha = float(alpha)
     beta = float(beta)
+
+    if config_file is not None:
+        config = configparser.ConfigParser()
+        config.read(config_file)
+        msgsteiner_args = config['msgsteiner']
+        if 'cost_mode' in config['ST-Steiner']:
+            cost_mode = config['ST-Steiner']['cost_mode']
+        # print(config)
+    else:
+        msgsteiner_args = {}
 
     exp_date = datetime.date.today().strftime("%Y%m%d")
 
@@ -141,7 +152,15 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
 
     network = io.read_network(network_file, logger=logger)
 
-    compute_edge_costs(network, logger=logger, inplace=True)
+    if cost_mode == 'weight':
+        cost_func = lambda weight: weight
+    elif cost_mode == '1-weightsqd':
+        cost_func = lambda weight: 1 - (weight ** 2)
+    else:
+        logger.error('Unsupported cost mode "{}"'.format(cost_mode))
+    logger.debug('Edge cost mode selected: {}'.format(cost_mode))
+    compute_edge_costs(network, cost_func=cost_func, 
+                       logger=logger, inplace=True)
 
     resolve_node_prizes(network, prizes)
 
@@ -157,15 +176,6 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
 
     const_prizes = nx.get_node_attributes(network, 'const_prize')
     undir_edges = nx.get_edge_attributes(network, 'cost')
-
-
-    
-    if config_file is not None:
-        config = configparser.ConfigParser()
-        config.read(config_file)
-        msgsteiner_args = config['msgsteiner']
-    else:
-        msgsteiner_args = {}
 
     G, run_data = find_steiner(stp_file, logger=logger,
                                undir_edges=undir_edges,
@@ -474,6 +484,7 @@ def create_logger(log_name, log_file,
 
 
 def compute_edge_costs(G, attr_name='weight',
+                       cost_func=lambda weight: weight,
                        logger=None, inplace=False):
 
     if logger is not None:
@@ -481,13 +492,9 @@ def compute_edge_costs(G, attr_name='weight',
     if not inplace:
         G = G.copy()
     for u, v, a in G.edges(data=attr_name):
-        G[u][v]['cost'] = compute_edge_cost(a)
+        G[u][v]['cost'] = cost_func(a)
     return G
 
-
-def compute_edge_cost(weight):
-    return weight
-    # return 1 - (weight ** 2)
 
 
 def resolve_node_prizes(network, prizes, label='prize', logger=None):
