@@ -58,7 +58,7 @@ def read_prizes(path, logger=None, upper=False):
     if logger is not None:
         logger.debug('Prizes read from {}'.format(path))
 
-    with pl.Path(path).open() as f:
+    with open(str(file)) as f:
         for l in f:
             l = l.strip().split()
             if upper:
@@ -99,7 +99,7 @@ def read_json(file, logger=None):
             logger.debug('{} does not exist'.format(file))
         return None
 
-    with file.open() as f:
+    with open(str(file)) as f:
         data = json.load(f)
 
     return data
@@ -112,7 +112,7 @@ def write_dict(path, dictionary, sep='\t'):
     if not path.parent.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
 
-    with path.open('w') as f:
+    with open(str(file), 'w') as f:
         for k, v in dictionary.items():
             print('{}{}{}'.format(k, sep, v), file=f)
 
