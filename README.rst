@@ -78,7 +78,7 @@ Assume genes `x, y` and `z` are equally likely to be selected (equal prizes and 
 
 	    A motivating toy example
 
-	    Figure shows 2 spatio-temporal windows (plates) and respective coexpression networks along with a parallel brain region and its plates (on right). Circles represent genes and black edges represent pairs of genes that are coexpressed. Red bordered nodes form the Steiner tree found on plate 1 (linked with red edges), which minimally connects black seed genes. In ST-Steiner, genes that are selected in plate 1 are more likely to be selected in plate 2. Curved lines between windows show the mapping of selected genes from plate 1 to plate 2. On the second plate ST-Steiner can pick `x, y` or `z` to connect the seed genes. Assuming that they all have identical priors and identical edge costs, the algorithm would pick `x`, because it is selected in the prior window and its prize is increased. If other brain regions in the first temporal window are also considered, then selected genes in those regions would also be used (from the plate on the right).
+	    Figure shows 2 spatio-temporal windows (plates) and respective coexpression networks along with a parallel brain region and its plates (on right). Circles represent genes and black edges represent pairs of genes that are coexpressed. Red bordered nodes form the Steiner tree found on plate 1 (linked with red edges), which minimally connects black seed genes. In ST-Steiner, genes that are selected in plate 1 are more likely to be selected in plate 2. Curved lines between windows show the mapping of selected genes from plate 1 to plate 2. On the second plate ST-Steiner can pick `X, Y` or `Z` to connect the seed genes. Assuming that they all have identical priors and identical edge costs, the algorithm would pick `X`, because it is selected in the prior window and its prize is increased. If other brain regions in the first temporal window are also considered, then selected genes in those regions would also be used (from the plate on the right).
 
 ST-Steiner solves this problem in two steps. 
 
@@ -87,24 +87,24 @@ First, we solve for Spatio-Temporal Window 1:
 .. code-block:: bash
 
 	$ python ./bin/st_steiner \
-	--network_file=data/network_1.tsv \
-	--prize_file=data/prizes.tsv \
+	--network_file=data/network_1.txt \
+	--prize_file=data/prizes.txt \
 	--msgsteiner_bin=../msgsteiner-1.3/msgsteiner \
 	--exp_id=cluster_1
 
-This generates a cluster ``cluster_1.tsv`` in folder ``clusters/``.
+This generates a cluster ``cluster_1.txt`` in folder ``clusters/``.
 
 Second, considering the solution for Spatio-Temporal Window 1, we solve ST-Steiner for Spatio-Temporal Window 2:
 
 .. code-block:: bash
 
-	$ echo "clusters/cluster_1.tsv" > clusters/cluster_list.txt; # Produced by the previous step.
+	$ echo "clusters/cluster_1.txt" > clusters/cluster_list.txt; # Produced by the previous step.
 
 .. code-block:: bash
 
 	$ python ./bin/st_steiner \
-	--network_file=data/network_2.tsv \
-	--prize_file=data/prizes.tsv \
+	--network_file=data/network_2.txt \
+	--prize_file=data/prizes.txt \
 	--msgsteiner_bin=../msgsteiner-1.3/msgsteiner \
 	--exp_id=cluster_2 \
 	--cluster_list_file=clusters/cluster_list.txt \

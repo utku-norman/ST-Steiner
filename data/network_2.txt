@@ -1,0 +1,15 @@
+A	O	2
+C	T	2
+O	C	2
+O	P	2
+P	S	2
+P	X	2
+P	Y	2
+P	Z	2
+S	R	2
+T	U	2
+U	V	2
+X	B	2
+Y	B	2
+Z	B	2
+Z	D	2

@@ -15,6 +15,7 @@ experiments/*
 tests/
 intermediate_files/
 clusters/
+nar/
 
 # extra files"
 *.jpg

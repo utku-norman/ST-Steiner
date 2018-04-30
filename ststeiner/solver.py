@@ -68,7 +68,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         exp_id = '{}_{}'.format(exp_date, uuid.uuid4().hex[:5])
         stp_file = pl.Path(stp_dir).joinpath('{}.stp'.format(exp_id))
         result_file = pl.Path(stp_dir).joinpath('{}.json'.format(exp_id))
-        result_details_file = pl.Path(cluster_dir).joinpath('{}.tsv'.format(exp_id))
+        result_details_file = pl.Path(cluster_dir).joinpath('{}.txt'.format(exp_id))
         log_file = pl.Path(log_dir).joinpath('{}.log'.format(exp_id))
         if not is_none(art_prizes_dir):
             art_prizes_file = pl.Path(art_prizes_dir).joinpath(
@@ -91,7 +91,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     else:
         stp_file = pl.Path(stp_dir).joinpath('{}.stp'.format(exp_id))
         result_file = pl.Path(stp_dir).joinpath('{}.json'.format(exp_id))
-        result_details_file = pl.Path(cluster_dir).joinpath('{}.tsv'.format(exp_id))
+        result_details_file = pl.Path(cluster_dir).joinpath('{}.txt'.format(exp_id))
         log_file = pl.Path(log_dir).joinpath('{}.log'.format(exp_id))
         if not is_none(art_prizes_dir):
             art_prizes_file = pl.Path(art_prizes_dir).joinpath(
@@ -122,8 +122,9 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                            for f in cluster_list_file.open().read().strip().split('\n')]
             logger.debug('Read constraining file list from {}: {} file{}'.format(
                 cluster_list_file, len(const_files), s_if_plural(len(const_files))))
+            logger.debug('Files:')
             for f in const_files:
-                logger.debug(f)
+                logger.debug('\t{}'.format(f))
         else:
             logger.debug('Constraint file not found at {}'.format(
                 cluster_list_file))
@@ -138,15 +139,17 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                     logger.debug('Unable to load constraining set from json {}'.format(
                         file))
                 nodes = data['nodes']
-            elif file.suffix == '.tsv':
+            elif file.suffix == '.txt':
                 nodes = set(file.open().read().strip().split())
             else:
-                const_results.append(data)
-                logger.debug('Loaded contraining set from {}: {} nodes'.format(
-                    file, len(nodes)))
-                G = nx.Graph()
-                G.add_nodes_from(nodes)
-                const_networks.append(G)
+                logger.debug('Unable to laod from {}'.format(file))
+                continue
+            const_results.append({'nodes':list(nodes)})
+            logger.debug('Loaded contraining set from {}: {} nodes'.format(
+                file, len(nodes)))
+            G = nx.Graph()
+            G.add_nodes_from(nodes)
+            const_networks.append(G)
 
     prizes = dict(io.read_prizes(prize_file, logger=logger))
 
@@ -205,7 +208,6 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         },
         'const_results': const_results,
     }
-
     io.write_json(result_file, metadata, logger=logger)
 
     file = result_details_file
@@ -247,6 +249,12 @@ def find_steiner(stp_file, msgsteiner_bin,
                                       logger=logger, **msgsteiner_args)
     logger.debug('Tree found, {} nodes, {} edges'.format(
         G.number_of_nodes(), G.number_of_edges()))
+    logger.debug('Nodes:')
+    for u in G:
+        logger.debug(u)
+    logger.debug('Edges:')
+    for e in G.edges():
+        logger.debug(e)
 
     run_data['terminals'] = list(terminals)
 
@@ -404,10 +412,11 @@ def _execute_msgsteiner(msgsteiner_path, stp_file,
 def _execute_script(executable_path, args=[], inhandle=None,
                     verbose=True, timer=True, logger=None):
     cmd = [str(executable_path)] + args
+    cmd_txt = ' '.join(cmd)
     # cmd = ' '.join(cmd)
     inhandle = pl.Path(inhandle)
     if verbose:
-        logger.debug('Executing command: {}'.format(' '.join(cmd)))
+        logger.debug('Executing command: {}'.format(cmd_txt))
         if inhandle is not None:
             logger.debug('(With inhandle {})'.format(inhandle))
         if timer:
@@ -551,43 +560,40 @@ def constrain_prizes(network, const_networks,
     '''Constrains the node prizes of a network using info. from other networks.'''
 
     if logger is not None:
-        logger.debug('Begin prize constraining procedure.')
+        logger.debug('Begin computing new node prizes.')
 
     if not inplace:
         network = network.copy()
 
-    if logger is not None:
-        logger.debug(('Computing artifical prizes'
-                      ' with lambda = {} and alpha = {}, mode = {}').format(
-                     lambd, alpha, prize_mode))
     art_prizes = _compute_art_prizes(network, const_networks, lambd=lambd,
                                      alpha=alpha, prize_mode=prize_mode,
                                      savefile=art_prizes_file, logger=logger)
 
-    if logger is not None:
-        logger.debug('Updating the original prizes')
     _update_org_prizes(network, art_prizes, from_attr_name=from_attr_name,
                        to_attr_name=to_attr_name,
-                       inplace=True)
+                       logger=logger, inplace=True)
 
     if logger is not None:
-        logger.debug('Prize constraining done.')
+        logger.debug('New prizes computed.')
 
     return network
 
 
 def _compute_art_prizes(network, const_networks, lambd, alpha=2,
-                        prize_mode='negative', savefile=None, logger=None):
+                        prize_mode='negative', savefile=None, logger=None,
+                        indent=2):
     '''Computes artificial prizes for a network.'''
 
     if logger is not None:
-        logger.debug(('Finding node frequencies '
+        logger.debug((' ' * indent + 'Finding node frequencies '
                       'in constraining networks'))
     node_freqs = find_frequency(const_networks)
 
     if logger is not None:
-        logger.debug(('Computing artificial prizes,'
-                      ' mode: {}').format(prize_mode))
+        logger.debug(' ' * indent + 'Computing artifical prizes')
+        logger.debug(' ' * indent + '  lambda = {}'.format(lambd))
+        logger.debug(' ' * indent + '  alpha  = {}'.format(alpha))
+        logger.debug(' ' * indent + '  mode   = {}'.format(prize_mode))
     art_prizes = dict()
     if 'negative' in prize_mode:
         for node in network.nodes():
@@ -612,7 +618,7 @@ def _compute_art_prizes(network, const_networks, lambd, alpha=2,
 
     if not is_none(savefile):
         if logger is not None:
-            logger.debug(('Saving artificial prizes, '
+            logger.debug((' ' * indent + 'Saving artificial prizes, '
                           'to {}').format(savefile))
         io.write_dict(savefile, art_prizes)
 
@@ -622,8 +628,12 @@ def _compute_art_prizes(network, const_networks, lambd, alpha=2,
 def _update_org_prizes(network, art_prizes,
                        from_attr_name='prize',
                        to_attr_name='prize',
-                       inplace=False):
+                       logger=None,
+                       inplace=False, indent=2):
     '''Add artificial prizes to the original prizes.'''
+
+    if logger is not None:
+        logger.debug(' ' * indent + 'Updating the original prizes')
 
     if not inplace:
         network = network.copy()
