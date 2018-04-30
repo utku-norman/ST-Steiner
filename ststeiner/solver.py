@@ -128,7 +128,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
             art_prizes_file = None
 
     if not pl.Path(log_dir).exists():
-        pl.Path(log_dir).mkdir(parents=True, exist_ok=True)
+        pl.Path(log_dir).mkdir(parents=True) #, exist_ok=True)
     logger = create_logger(log_file=log_file, log_name=log_name,
                            stream_level=logging.DEBUG)
     logger.debug('Running {}, {} with ID {}'.format(log_name,
@@ -137,7 +137,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     for d in [stp_dir, cluster_dir, log_dir]:
         if not pl.Path(d).exists():
             logger.debug('Creating directory {}'.format(d))
-            pl.Path(d).mkdir(parents=True, exist_ok=True)
+            pl.Path(d).mkdir(parents=True) #, exist_ok=True)
 
     # Get file list.
     const_results = list()

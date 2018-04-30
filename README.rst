@@ -60,7 +60,7 @@ Download the required python libraries, e.g. via pip <https://pypi.org/project/p
 
 .. code-block:: bash
 	
-	$ pip install -r requirements.txt
+	$ pip install --user -r requirements.txt
 
 
 Simple example
