@@ -127,6 +127,9 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         else:
             art_prizes_file = None
 
+    if not art_prizes_dir.exists():
+        art_prizes_dir.mkdir()
+    
     if not pl.Path(log_dir).exists():
         pl.Path(log_dir).mkdir(parents=True) #, exist_ok=True)
     logger = create_logger(log_file=log_file, log_name=log_name,
@@ -254,8 +257,9 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         if not is_none(art_prizes_dir):
             if pl.Path(art_prizes_file).exists():
                 pl.Path(art_prizes_file).unlink()
-            if len(list(pl.Path(art_prizes_dir).glob('*'))) == 0:
-                art_prizes_dir.rmdir()
+            if len(list(art_prizes_dir.glob('*'))) == 0:
+                if art_prizes_dir.exists():
+                    art_prizes_dir.rmdir()
         if logger is not None:
             logger.debug('Intermediate files and folder are removed')   
     logger.debug('End')
