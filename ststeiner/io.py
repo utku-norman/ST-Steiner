@@ -50,21 +50,21 @@ import networkx as nx
 # local application imports
 from ststeiner.utils import s_if_plural, is_none
 
-def read_prizes(path, logger=None, upper=False):
+def read_prizes(file, logger=None, upper=False):
     '''Read node prize data from file.'''
 
     prizes = dict()
 
     if logger is not None:
-        logger.debug('Prizes read from {}'.format(path))
+        logger.debug('Prizes read from {}'.format(file))
 
     with open(str(file)) as f:
-        for l in f:
-            l = l.strip().split()
+        for line in f:
+            line = line.strip().split()
             if upper:
-                prizes[l[0].upper()] = float(l[1])
+                prizes[line[0].upper()] = float(line[1])
             else: 
-                prizes[l[0]] = float(l[1])
+                prizes[line[0]] = float(line[1])
     return prizes
 
 
