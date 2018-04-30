@@ -18,9 +18,9 @@ Installation
 Prerequisites
 -------------
 
-+ python version 3.5 or greater
++ Python version 2.7 or 3.5+
 + `Boost C++ Libraries <http://www.boost.org/>`_
-+ python packages listed in requirements.txt
++ Python packages listed in `requirements.txt`
 
 Initialize the environment
 --------------------------
@@ -56,7 +56,11 @@ Download ST-Steiner source code and change the working folder to ST-Steiner:
 
 	$ git clone https://github.com/ciceklab/ST-Steiner.git && cd ST-Steiner
 
-Download the required python libraries, e.g. via pip <https://pypi.org/project/pip/>`_:
+Install Python libraries
+--------------------------
+
+
+Install the required Python libraries, e.g. via `pip <https://pypi.org/project/pip/>`_:
 
 .. code-block:: bash
 	
