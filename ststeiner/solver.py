@@ -449,8 +449,7 @@ def _execute_script(executable_path, args=[], inhandle=None,
             start = time.time()
 
     if inhandle is not None:
-        # with inhandle.open() as in_h:
-        with open(inhandle) as in_h:
+        with inhandle.open() as in_h:
             p_in = subprocess.Popen(cmd, stdin=in_h,
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out_data, err_data = p_in.communicate()
