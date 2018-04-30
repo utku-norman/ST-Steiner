@@ -127,9 +127,10 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         else:
             art_prizes_file = None
 
+    art_prizes_dir = pl.Path(art_prizes_dir)
     if not art_prizes_dir.exists():
         art_prizes_dir.mkdir()
-    
+
     if not pl.Path(log_dir).exists():
         pl.Path(log_dir).mkdir(parents=True) #, exist_ok=True)
     logger = create_logger(log_file=log_file, log_name=log_name,
@@ -247,7 +248,6 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         logger.debug('Saving to {}'.format(file))
     nx.write_edgelist(G, str(file), data=False, delimiter='\t')
  
-    art_prizes_dir = pl.Path(art_prizes_dir)
     if not retain_intermediate:
         stp_file.unlink()
         result_file.unlink()
