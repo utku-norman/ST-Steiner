@@ -50,12 +50,17 @@ Compile the solver (requires `Boost C++ Libraries <http://www.boost.org/>`_):
 Download ST-Steiner source
 --------------------------
 
-Download ST-Steiner source code:
+Download ST-Steiner source code and change the working folder to ST-Steiner:
 
 .. code-block:: bash
 
 	$ git clone https://github.com/ciceklab/ST-Steiner.git && cd ST-Steiner
 
+Download the required python libraries, e.g. via pip <https://pypi.org/project/pip/>`_:
+
+.. code-block:: bash
+	
+	$ pip install -r requirements.txt
 
 
 Simple example
