@@ -17,14 +17,42 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+from __future__ import print_function
+
+
 # standard library imports
 import sys
+if sys.version_info[0] > 2:
+    # py3k
+    pass
+else:
+    # py2
+    import codecs
+    import warnings
+    def open(file, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None, closefd=True, opener=None):
+        if newline is not None:
+            warnings.warn('newline is not supported in py2')
+        if not closefd:
+            warnings.warn('closefd is not supported in py2')
+        if opener is not None:
+            warnings.warn('opener is not supported in py2')
+        return codecs.open(filename=file, mode=mode, encoding=encoding,
+                    errors=errors, buffering=buffering)
+
+
 import os
 import subprocess
 import time
 import logging
 import datetime
 import uuid
+
+
+# try:
+#   from pathlib import Path
+# except ImportError:
+#   from pathlib2 import Path  # python 2 backport
 
 
 # third party imports
@@ -99,7 +127,8 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         else:
             art_prizes_file = None
 
-    pl.Path(log_dir).mkdir(parents=True, exist_ok=True)
+    if not pl.Path(log_dir).exists():
+        pl.Path(log_dir).mkdir(parents=True, exist_ok=True)
     logger = create_logger(log_file=log_file, log_name=log_name,
                            stream_level=logging.DEBUG)
     logger.debug('Running {}, {} with ID {}'.format(log_name,
@@ -108,7 +137,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     for d in [stp_dir, cluster_dir, log_dir]:
         if not pl.Path(d).exists():
             logger.debug('Creating directory {}'.format(d))
-        pl.Path(d).mkdir(parents=True, exist_ok=True)
+            pl.Path(d).mkdir(parents=True, exist_ok=True)
 
     # Get file list.
     const_results = list()
@@ -285,37 +314,34 @@ def _write_input(stp_file, undir_edges=set(),
     stp_file = pl.Path(stp_file)
     if not stp_file.parent.exists():
         stp_file.parent.mkdir(parents=True)
-    # dr = os.path.dirname(stp_file)
-    # if len(dr) > 0:
-    #     os.makedirs(dr, exist_ok=True)
 
     # Write data to the MSGSTEINER input file
     # with open(stp_file, 'w') as f:
-    with stp_file.open('w') as f:
+    with open(str(stp_file), 'w') as f:
 
         # Write undirected edges in the format 'E v1 v2 w12'.
         if comments is not None:  # and len(undir_edges) > 0:
-            print(comments, 'undirected edges', file=f)
+            print('{} undirected edges'.format(comments), file=f)
         for (u, v), a in undir_edges.items():  # G.edges(data=edge_cost_label):
             if u != v:
                 print('E', u, v, a, file=f)
 
         # Write directed edges in the format 'D v1 v2 w12'
         if comments is not None:  # and len(dir_edges) > 0:
-            print(comments, 'directed edges', file=f)
+            print('{} directed edges'.format(comments), file=f)
         for u, v, a in dir_edges:
             if u != v:
                 print('D', u, v, a, file=f)
 
         # Write node values  in the format 'W v1 p1'
         if comments is not None:  # and len(prizes) > 0:
-            print(comments, 'node prizes', file=f)
+            print('{} node prizes'.format(comments), file=f)
         for node, prize in prizes.items():  # G.nodes_iter():
             print('W', node, prize, file=f)  # G.node[n][node_prize_label]))
 
         # Write terminals  in the format 'T v1'
         if comments is not None:  # and len(terminals) > 0:
-            print(comments, 'terminals', file=f)
+            print('{} terminals'.format(comments), file=f)
         for terminal in terminals:
             print('T', terminal, file=f)
 
@@ -484,8 +510,11 @@ def create_logger(log_name, log_file,
     ch.setFormatter(formatter)
 
     # Add the handlers to the logger.
-    if (logger.hasHandlers()):
-        logger.handlers.clear()
+    # if (logger.hasHandlers()):
+        # logger.handlers.clear()
+    if len(logger.handlers) > 0:
+        logger.handlers = []
+
     logger.addHandler(fh)
     logger.addHandler(ch)
 

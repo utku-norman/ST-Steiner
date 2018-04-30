@@ -17,9 +17,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+from __future__ import print_function
+
+
 
 # standard library imports
 import json
+import sys
+if sys.version_info[0] > 2:
+    # py3k
+    pass
+else:
+    # py2
+    import codecs
+    import warnings
+    def open(file, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None, closefd=True, opener=None):
+        if newline is not None:
+            warnings.warn('newline is not supported in py2')
+        if not closefd:
+            warnings.warn('closefd is not supported in py2')
+        if opener is not None:
+            warnings.warn('opener is not supported in py2')
+        return codecs.open(filename=file, mode=mode, encoding=encoding,
+                    errors=errors, buffering=buffering)
+
 
 # third party imports
 import pathlib as pl
@@ -27,7 +49,6 @@ import networkx as nx
 
 # local application imports
 from ststeiner.utils import s_if_plural, is_none
-
 
 def read_prizes(path, logger=None, upper=False):
     '''Read node prize data from file.'''
@@ -106,14 +127,16 @@ def write_json(file, data, logger=None):
     if not file.parent.exists():
         file.parent.mkdir(parents=True, exist_ok=True)
 
-    with file.open('w') as f:
+    with open(str(file), 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)
 
 
 def write_result(G, logger=None):
 
-    result = {**G.graph,
-              'beta': beta,
-              }
+    result = dict(**G.graph)
+    result['beta'] = beta
+    # result = {**G.graph,
+    #           'beta': beta,
+    #           }
 
     write_json(result_file, result, logger)

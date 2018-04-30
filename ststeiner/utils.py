@@ -17,8 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-
-
 s_if_plural = lambda length : 's' if length > 1 else ''
 
 is_none = lambda val: val is None or val == 'None'
