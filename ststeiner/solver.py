@@ -252,7 +252,8 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         if len(list(d.glob('*'))) == 0:
             d.rmdir()
         if not is_none(art_prizes_dir):
-            pl.Path(art_prizes_file).unlink()
+            if pl.Path(art_prizes_file).exists():
+                pl.Path(art_prizes_file).unlink()
             if len(list(pl.Path(art_prizes_dir).glob('*'))) == 0:
                 art_prizes_dir.rmdir()
         if logger is not None:
