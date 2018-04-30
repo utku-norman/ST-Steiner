@@ -56,6 +56,9 @@ Download ST-Steiner source code and change the working folder to ST-Steiner:
 
 	$ git clone https://github.com/ciceklab/ST-Steiner.git && cd ST-Steiner
 
+
+
+
 Install Python libraries
 --------------------------
 
@@ -65,6 +68,18 @@ Install the required Python libraries, e.g. via `pip <https://pypi.org/project/p
 .. code-block:: bash
 	
 	$ pip install --user -r requirements.txt
+
+Updating
+========
+
+Update ST-Steiner source
+------------------------
+
+When in an ST-Steiner folder, you can download the newest source code from the remote repository by typing:
+
+.. code-block:: bash
+
+	$ git pull origin master
 
 
 Simple example
