@@ -150,7 +150,7 @@ Usage
                           [--cluster_list_file CLUSTER_LIST_FILE]
                           [--art_prizes_dir ART_PRIZES_DIR]
                           [-b BETA] [-l LAMBD] [-a ALPHA]
-                          [--exp_id EXP_ID] [--fold FOLD]
+                          [--exp_id EXP_ID]
                           [--prize_mode PRIZE_MODE]
                           [--retain_intermediate]
                           [--version]

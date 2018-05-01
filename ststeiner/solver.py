@@ -70,7 +70,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                     stp_dir='inputs', cluster_dir='results', log_dir='logs',
                     beta=1, lambd=0, alpha=2, prize_mode='positive',
                     cost_mode='weight',
-                    log_name='ST-Steiner', rounder=6, fold='1-1',
+                    log_name='ST-Steiner', rounder=6, # fold='1-1',
                     exp_id=None, art_prizes_dir=None,
                     retain_intermediate=True):
 
@@ -231,7 +231,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
         'log': run_data,
         'log_name': log_name,
         'prize_mode': prize_mode,
-        'fold': fold,
+        # 'fold': fold,
         'files': {
             'result': str(pl.Path(result_file).name),
             'log': str(pl.Path(log_file).name),
