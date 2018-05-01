@@ -105,12 +105,12 @@ def read_json(file, logger=None):
     return data
 
 
-def write_dict(path, dictionary, sep='\t'):
+def write_dict(file, dictionary, sep='\t'):
 
-    path = pl.Path(path)
+    file = pl.Path(file)
 
-    if not path.parent.exists():
-        path.parent.mkdir(parents=True, exist_ok=True)
+    if not file.parent.exists():
+        file.parent.mkdir(parents=True, exist_ok=True)
 
     with open(str(file), 'w') as f:
         for k, v in dictionary.items():
