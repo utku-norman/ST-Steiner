@@ -18,7 +18,7 @@ Installation
 Prerequisites
 -------------
 
-+ Python version 2.7 or 3.5+
++ Python version 2.7, 3.5 or 3.6
 + `Boost C++ Libraries <http://www.boost.org/>`_
 + Python packages listed in `requirements.txt`
 

@@ -31,7 +31,6 @@ def main(argv):
     # Parse the command line arguments.
     args = parse_commands(argv)
     # Run the solver.
-    print(args)
     solve_st_steiner(**vars(args))
 
 

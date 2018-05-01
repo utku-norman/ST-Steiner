@@ -21,6 +21,8 @@ nar/
 *.jpg
 *.xcf
 *.eps
+data/*NewASC*
+
 
 # Distribution / packaging
 .Python

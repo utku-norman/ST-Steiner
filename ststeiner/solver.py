@@ -136,7 +136,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     logger = create_logger(log_file=log_file, log_name=log_name,
                            stream_level=logging.DEBUG)
     logger.debug('Running {}, {} with ID {}'.format(log_name,
-                                                    datetime.date.today(), exp_id))
+                                                    datetime.datetime.now(), exp_id))
 
     for d in [stp_dir, cluster_dir, log_dir]:
         if not pl.Path(d).exists():
@@ -261,8 +261,9 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                 if art_prizes_dir.exists():
                     art_prizes_dir.rmdir()
         if logger is not None:
-            logger.debug('Intermediate files and folder are removed')   
-    logger.debug('End')
+            logger.debug('Intermediate files and folder are removed')  
+    logger.debug('{} {} with ID {} completed.'.format(log_name,
+        datetime.datetime.now(), exp_id))
 
     return G, metadata
 
