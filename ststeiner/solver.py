@@ -74,6 +74,12 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                     exp_id=None, art_prizes_dir=None,
                     retain_intermediate=True):
 
+    dirs = [stp_dir, cluster_dir, log_dir, art_prizes_dir]
+    stp_dir = pl.Path(stp_dir)
+    cluster_dir = pl.Path(cluster_dir)
+    log_dir = pl.Path(log_dir)
+    art_prizes_dir = pl.Path(art_prizes_dir)
+
     # Type checks here.
     lambd = float(lambd)
     alpha = float(alpha)
@@ -92,44 +98,19 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     exp_date = datetime.date.today().strftime("%Y%m%d")
 
     if is_none(exp_id):
-
         exp_id = '{}_{}'.format(exp_date, uuid.uuid4().hex[:5])
-        stp_file = pl.Path(stp_dir).joinpath('{}.stp'.format(exp_id))
-        result_file = pl.Path(stp_dir).joinpath('{}.json'.format(exp_id))
-        result_details_file = pl.Path(cluster_dir).joinpath('{}.txt'.format(exp_id))
-        log_file = pl.Path(log_dir).joinpath('{}.log'.format(exp_id))
-        if not is_none(art_prizes_dir):
-            art_prizes_file = pl.Path(art_prizes_dir).joinpath(
-                '{}.txt'.format(exp_id))
-        else:
-            art_prizes_file = None
 
-        while stp_file.exists() or result_file.exists() or \
-                log_file.exists(): # or art_prizes_file.exists():
-            exp_id = '{}_{}'.format(exp_date, uuid.uuid4().hex[:5])
-            stp_file = pl.Path(stp_dir).joinpath('{}.stp'.format(exp_id))
-            result_file = pl.Path(cluster_dir).joinpath(
-                '{}.json'.format(exp_id))
-            log_file = pl.Path(log_dir).joinpath('{}.log'.format(exp_id))
-            if not is_none(art_prizes_dir):
-                art_prizes_file = pl.Path(art_prizes_dir).joinpath(
-                    '{}.txt'.format(exp_id))
-            else:
-                art_prizes_file = None
-    else:
-        stp_file = pl.Path(stp_dir).joinpath('{}.stp'.format(exp_id))
-        result_file = pl.Path(stp_dir).joinpath('{}.json'.format(exp_id))
-        result_details_file = pl.Path(cluster_dir).joinpath('{}.txt'.format(exp_id))
-        log_file = pl.Path(log_dir).joinpath('{}.log'.format(exp_id))
-        if not is_none(art_prizes_dir):
-            art_prizes_file = pl.Path(art_prizes_dir).joinpath(
-                '{}.txt'.format(exp_id))
-        else:
-            art_prizes_file = None
-
-    art_prizes_dir = pl.Path(art_prizes_dir)
+    stp_file = stp_dir.joinpath('{}.stp'.format(exp_id))
+    result_file = stp_dir.joinpath('{}.json'.format(exp_id))
+    result_details_file = cluster_dir.joinpath('{}.txt'.format(exp_id))
+    log_file = log_dir.joinpath('{}.log'.format(exp_id))
     if not art_prizes_dir.exists():
         art_prizes_dir.mkdir()
+    if not is_none(art_prizes_dir):
+        art_prizes_file = art_prizes_dir.joinpath(
+            '{}.txt'.format(exp_id))
+    else:
+        art_prizes_file = None
 
     if not pl.Path(log_dir).exists():
         pl.Path(log_dir).mkdir(parents=True) #, exist_ok=True)
@@ -138,10 +119,11 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     logger.debug('Running {}, {} with ID {}'.format(log_name,
                                                     datetime.datetime.now(), exp_id))
 
-    for d in [stp_dir, cluster_dir, log_dir]:
+
+    for d in dirs:
         if not pl.Path(d).exists():
             logger.debug('Creating directory {}'.format(d))
-            pl.Path(d).mkdir(parents=True) #, exist_ok=True)
+            d.mkdir(parents=True) #, exist_ok=True)
 
     # Get file list.
     const_results = list()

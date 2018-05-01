@@ -75,8 +75,8 @@ def parse_commands(argv):
     parser.add_argument('--exp_id', type=str, default='None',
                        help='''sets an ID for the experiment. Generated in format <date>_<random number> by default.
                        Overriden if exists.''')
-    parser.add_argument('--fold', type=str, default=config['ST-Steiner']['fold'],
-                       help='''fold number can be specified here.''')
+    # parser.add_argument('--fold', type=str, default=config['ST-Steiner']['fold'],
+    #                    help='''fold number can be specified here.''')
 
     parser.add_argument('--prize_mode', type=str, default=config['ST-Steiner']['prize_mode'],
                        help='''sets the artificial prize mode: positive (default), or negative''')
