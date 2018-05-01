@@ -285,11 +285,12 @@ def find_steiner(stp_file, msgsteiner_bin,
     logger.debug('Tree found, {} nodes, {} edges'.format(
         G.number_of_nodes(), G.number_of_edges()))
     logger.debug('Nodes:')
-    for u in G:
-        logger.debug(u)
-    logger.debug('Edges:')
-    for e in G.edges():
-        logger.debug(e)
+    if len(G) < 100:
+        for u in G:
+            logger.debug(u)
+        logger.debug('Edges:')
+        for e in G.edges():
+            logger.debug(e)
 
     run_data['terminals'] = list(terminals)
 
