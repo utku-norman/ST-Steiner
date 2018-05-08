@@ -19,25 +19,15 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='ST_Steiner',
-    version='0.1.5-alpha',
+    version='0.1.6-alpha',
 
-    description='an algorithm for spatio-temporal gene discovery for Autism Spectrum Disorder',  # Required
+    description='an algorithm for spatio-temporal gene discovery for Autism Spectrum Disorder',
 
-    long_description=long_description,  # Optional
+    long_description=long_description, 
 
-    # This should be a valid link to your project's main homepage.
-    #
-    # This field corresponds to the "Home-Page" metadata field:
-    # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/utku-norman/ST-Steiner',  # Optional
-
-    # This should be your name or the name of the organization which owns the
-    # project.
-    author='Utku Norman',  # Optional
-
-    # This should be a valid email address corresponding to the author listed
-    # above.
-    author_email='utku.norman@bilkent.edu.tr',  # Optional
+    url='https://github.com/ciceklab/ST-Steiner',
+    author='Utku Norman',
+    author_email='utku.norman@bilkent.edu.tr',
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -91,8 +81,10 @@ setup(
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
+        'configparser',
+        'pathlib',
         'networkx',
-        ],  # Optional
+        ],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
