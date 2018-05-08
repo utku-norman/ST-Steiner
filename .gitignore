@@ -23,6 +23,7 @@ nar/
 *.eps
 data/*NewASC*
 TODO.txt
+*-node_map.txt
 
 # Distribution / packaging
 .Python
