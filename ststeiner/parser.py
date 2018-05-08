@@ -52,43 +52,43 @@ def parse_commands(argv):
     parser.add_argument('--config_file', type=str, default=default_ini_file,
                        help='''configuration file for the experiment''')
 
-    parser.add_argument('--stp_dir', type=str, default=config['Paths']['stp_dir'],
+    parser.add_argument('--stp_dir', type=str, default=config.get('Paths', 'stp_dir'),
                        help='''output directory to to place intermediate files as input to msgsteiner''')
-    parser.add_argument('--cluster_dir', type=str, default=config['Paths']['cluster_dir'],
+    parser.add_argument('--cluster_dir', type=str, default=config.get('Paths', 'cluster_dir'),
                        help='''directory to place the results''')
-    parser.add_argument('--log_dir', type=str, default=config['Paths']['log_dir'],
+    parser.add_argument('--log_dir', type=str, default=config.get('Paths', 'log_dir'),
                        help='''output directory for a log file that describes the experiment''')
-    parser.add_argument('--cluster_list_file', type=str, default=config['Paths']['cluster_list_file'],
+    parser.add_argument('--cluster_list_file', type=str, default=config.get('Paths', 'cluster_list_file'),
                        help='''a file that contains a list of files that point to used to networks in F_c to calculate artificial prize''')
-    parser.add_argument('--art_prizes_dir', type=str, default=config['Paths']['art_prizes_dir'],
+    parser.add_argument('--art_prizes_dir', type=str, default=config.get('Paths', 'art_prizes_dir'),
                        help='''output directory for a prize file that contains the artificial prizes added to the original prizes''')
 
     # Define arguments for trade-off parameters.
-    parser.add_argument('-b', '--beta', type=float, default=config['Parameters']['beta'],
+    parser.add_argument('-b', '--beta', type=float, default=config.get('Parameters', 'beta'),
                        help='''sets node prize and edge cost trade-off''')
-    parser.add_argument('-l', '--lambda', type=float, dest='lambd', default=config['Parameters']['lambd'],
+    parser.add_argument('-l', '--lambda', type=float, dest='lambd', default=config.get('Parameters', 'lambd'),
                        help='''sets the parameter that scales the effect of an artificial prize''')
-    parser.add_argument('-a', '--alpha', type=float, default=config['Parameters']['alpha'],
+    parser.add_argument('-a', '--alpha', type=float, default=config.get('Parameters', 'alpha'),
                        help='''sets the parameter that adjusts the non-linearity for an artificial prize''')
 
     # Other arguments.
     parser.add_argument('--exp_id', type=str, default='None',
                        help='''sets an ID for the experiment. Generated in format <date>_<random number> by default.
                        Overriden if exists.''')
-    # parser.add_argument('--fold', type=str, default=config['ST-Steiner']['fold'],
+    # parser.add_argument('--fold', type=str, default=config.get('ST-Steiner', 'fold'),
     #                    help='''fold number can be specified here.''')
 
-    parser.add_argument('--prize_mode', type=str, default=config['ST-Steiner']['prize_mode'],
+    parser.add_argument('--prize_mode', type=str, default=config.get('ST-Steiner', 'prize_mode'),
                        help='''sets the artificial prize mode: positive (default), or negative''')
 
-    parser.add_argument('--cost_mode', type=str, default=config['ST-Steiner']['cost_mode'],
+    parser.add_argument('--cost_mode', type=str, default=config.get('ST-Steiner', 'cost_mode'),
                        help='''sets the edge cost mode: "weight" (default), or "1-weightsqd" (1-weight^2)''')
 
-    parser.add_argument('--retain_intermediate', default=config['ST-Steiner'].getboolean('retain_intermediate'),
+    parser.add_argument('--retain_intermediate', default=config.getboolean('ST-Steiner', 'retain_intermediate'),
                        help='''sets whether to remove ST-Steiner generated intermediate files''', action='store_true')
 
     parser.add_argument('--version', action='version',
-                       version='%(prog)s ' + str(config['ST-Steiner']['version']))
+                       version='%(prog)s ' + str(config.get('ST-Steiner', 'version')))
 
     # Do the parsing and return the results.
     args = parser.parse_args(argv)

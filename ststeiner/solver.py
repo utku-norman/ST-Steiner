@@ -74,11 +74,12 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
                     exp_id=None, art_prizes_dir=None,
                     retain_intermediate=True):
 
-    dirs = [stp_dir, cluster_dir, log_dir, art_prizes_dir]
+    
     stp_dir = pl.Path(stp_dir)
     cluster_dir = pl.Path(cluster_dir)
     log_dir = pl.Path(log_dir)
     art_prizes_dir = pl.Path(art_prizes_dir)
+    dirs = [stp_dir, cluster_dir, log_dir, art_prizes_dir]
 
     # Type checks here.
     lambd = float(lambd)
@@ -88,9 +89,9 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
     if config_file is not None:
         config = configparser.ConfigParser()
         config.read(config_file)
-        msgsteiner_args = config['msgsteiner']
-        if 'cost_mode' in config['ST-Steiner']:
-            cost_mode = config['ST-Steiner']['cost_mode']
+        msgsteiner_args = dict(config.items('msgsteiner'))
+        if 'cost_mode' in dict(config.items('ST-Steiner')):
+            cost_mode = config.get('ST-Steiner', 'cost_mode')
         # print(config)
     else:
         msgsteiner_args = {}
@@ -121,7 +122,7 @@ def solve_st_steiner(network_file, prize_file, msgsteiner_bin,
 
 
     for d in dirs:
-        if not pl.Path(d).exists():
+        if not d.exists():
             logger.debug('Creating directory {}'.format(d))
             d.mkdir(parents=True) #, exist_ok=True)
 

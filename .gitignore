@@ -22,7 +22,7 @@ nar/
 *.xcf
 *.eps
 data/*NewASC*
-
+TODO.txt
 
 # Distribution / packaging
 .Python
